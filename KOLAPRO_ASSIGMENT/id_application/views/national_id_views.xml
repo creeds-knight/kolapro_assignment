@@ -1,0 +1,80 @@
+<odoo>
+  <!-- Tree View Definition -->
+  <record id="view_id_application_tree" model="ir.ui.view">
+    <field name="name">national.id.application.tree</field>
+    <field name="model">id.application</field>
+    <field name="arch" type="xml">
+      <tree string="Applicant Details">
+        <field name="name" string="Name"/>
+        <field name="sex" string="Sex"/>
+        <field name="country_of_origin" string="Country of Origin"/>
+        <field name="parent_nin" string="Parent NIN"/>
+        <field name="date_of_birth" string="Date of Birth" widget="date"/>
+        <field name="nin" string="NIN"/>
+        <field name="stage" string="Status"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form View Definition with Two Columns -->
+  <record id="view_id_application_form" model="ir.ui.view">
+    <field name="name">national.id.application.form</field>
+    <field name="model">id.application</field>
+    <field name="arch" type="xml">
+      <form string="Applicant Details">
+        <sheet>
+          <!-- Two-column layout for fields -->
+          <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-6">
+              <group>
+                <field name="name" string="Name"/>
+                <field name="sex" string="Sex"/>
+                <field name="country_of_origin" string="Country of Origin"/>
+                <field name="parent_nin" string="Parent NIN"/>
+              </group>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <group>
+                <field name="date_of_birth" string="Date of Birth" widget="date"/>
+                <field name="lc_letter" string="LC Letter"/>
+                <field name="photo" string="Photo"/>
+                <field name="stage" string="Stage"/>
+                <field name="nin" string="NIN"/>
+              </group>
+            </div>
+          </div>
+
+          <!-- Button Group Section -->
+          <group col='4' class="oe_button_box" name="buttons_group">
+            <button name="submit_application" type="object" string="Submit" class="oe_highlight"/>
+            <button name="approve_stage1" type="object" string="Approve 1" class="btn-primary"/>
+            <button name="approve_stage2" type="object" string="Approve 2" class="btn-primary"/>
+            <button name="reject_application" type="object" string="Reject" class="btn-danger"/>
+          </group>
+        </sheet>
+
+        <!-- Chatter Section (Message Log without Send Message) -->
+        <div class="oe_chatter">
+          <field name="message_ids" widget="mail_thread" options="{'no_send_message': True, 'no_log': True}"/>
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <!-- Action for Tree and Form Views -->
+  <record id="action_id_application_tree" model="ir.actions.act_window">
+    <field name="name">national.id.application.action.tree</field>
+    <field name="res_model">id.application</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_id" ref="view_id_application_tree"/>
+  </record>
+
+  <!-- Menu Items -->
+  <menuitem id="menu_id_root_applications" name="Applications"/>
+  <menuitem id="menu_id_applicants" name="Applicants" parent="menu_id_root_applications"/>
+  <menuitem id="menu_id_applicant_details" name="Applicant Details" parent="menu_id_applicants" action="action_id_application_tree"/>
+</odoo>
+

@@ -1,0 +1,11 @@
+<odoo>
+  <data noupdate='1'>
+    <record id='sq_national_id_number' model='ir.sequence'>
+      <field name='name'>National ID NUmber</field>
+      <field name='code'>id.application</field>
+      <field name='padding'>4</field>
+      <field name='prefix'>UG</field>
+      <field name='suffix'>LM</field>
+    </record>
+  </data>
+</odoo>

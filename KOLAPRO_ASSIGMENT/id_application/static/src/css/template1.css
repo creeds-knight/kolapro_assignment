@@ -1,0 +1,59 @@
+/* template1.css */
+
+html, body {
+    background-color: #3d82f2 !important;*/
+    color: #ffffff !important; /* Light text color for contrast */
+    font-family: Arial, sans-serif;
+    padding: 20px;
+
+}
+
+.form-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 2rem;
+    background-color: #02090d; /* Darker box for the form */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 128, 0, 0.7); /* Green box shadow */
+}
+
+h2.form-title {
+    font-weight: 700;
+    color: #ffffff; /* White text for header */
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #ffffff; /* Label color for contrast */
+}
+
+.form-control {
+    border-radius: 4px;
+    padding: 0.75rem;
+    background-color: #6c757d !important; /* Darker input field */
+    color: #ffffff !important; /* Input text color */
+    border: 1px solid #ced4da; /* Light border for inputs */
+}
+
+.form-control:focus {
+    background-color: #495057 !important; /* Darker on focus for better contrast */
+    border-color: #80bdff; /* Light border color on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap focus shadow */
+}
+
+.btn-primary {
+    background-color: #28a745 !important; /* Green button */
+    border-color: #28a745 !important; /* Green border */
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.75rem 1.25rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #218838 !important; /* Darker green on hover */
+    border-color: #1e7e34 !important; /* Darker green border on hover */
+}
+
