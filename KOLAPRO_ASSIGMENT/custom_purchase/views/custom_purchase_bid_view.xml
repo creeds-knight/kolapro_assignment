@@ -1,41 +1,83 @@
 <odoo>
-  <record id='view_custom_purchase_bid_tree' model='ir.ui.view'>
+  <!-- Tree View -->
+  <record id="view_custom_purchase_bid_tree" model="ir.ui.view">
     <field name="name">custom.purchase.bid.tree</field>
     <field name="model">custom.purchase.bid</field>
-    <field name="arch" type='xml'>
-      <tree string='Vendor Bids'>
-        <field name="name"/>
-        <field name="order_id" />
-        <field name="vendor_id"/>
-        <field name="bid_amount"/>
-        <field name="bid_date"/>
-        <field name="is_winning_bid"/>
+    <field name="arch" type="xml">
+      <tree string="Vendor Bids">
+        <field name="name" />
+        <field name="rfq" />
+        <field name="vendor" />
+        <field name="bid_amount" />
+        <field name="bid_date" />
+        <field name="status" />
       </tree>
     </field>
   </record>
 
-  <record id='view_custom_purchase_bid_form' model='ir.ui.view'>
+  <!-- Form View -->
+  <record id="view_custom_purchase_bid_form" model="ir.ui.view">
     <field name="name">custom.purchase.bid.form</field>
     <field name="model">custom.purchase.bid</field>
-    <field name="arch" type='xml'>
-      <tree string='Vendor Bids'>
-        <field name="name"/>
-        <field name="order_id" />
-        <field name="vendor_id"/>
-        <field name="bid_amount"/>
-        <field name="bid_date"/>
-      </tree>
+    <field name="arch" type="xml">
+      <form string="RFQ Bids">
+        <header>
+          <button name="action_accept_bid" string="Accept Bid" type="object" class="oe_highlight" />
+          <button name="action_refuse_bid" string="Reject Bid" type="object" />
+          <field name="status" widget="statusbar" statusbar_visible="pending,accepted,rejected"
+            readonly="1" />
+        </header>
+        <sheet>
+          <group colspan="2">
+            <!-- Left Column -->
+            <group>
+              <field name="name" readonly="1" />
+              <field name="rfq" />
+              <field name="bid_amount" />
+              <field name="bid_date" />
+            </group>
+            <!-- Right Column -->
+            <group>
+              <field name="status" readonly="1" />
+              <field name="vendor" />
+              <field name="bid_details" />
+              <field name="vendors_with_bids" invisible="1" />
+            </group>
+          </group>
+          <notebook>
+            <page string="BIDS" name="BIDS">
+              <group>
+                <field name="number_of_bids_on_rfq" />
+              </group>
+              <field name="bids_on_rfq" widget="one2many_list"
+                options="{'no_create': True, 'no_open': True}">
+                <tree>
+                  <field name="name" />
+                  <field name="rfq" />
+                  <field name="vendor" />
+                  <field name="status" />
+                </tree>
+              </field>
+            </page>
+          </notebook>
+          <div class="oe_chatter">
+            <field name="message_ids" widget="mail_thread" />
+            <field name="activity_ids" widget="mail_activity" />
+          </div>
+        </sheet>
+      </form>
     </field>
   </record>
 
-  <record id='action_custom_purchase_tree' model='ir.actions.act_window'>
-    <field name='name'>Vendor Bids</field>
-    <field name='res_model'>custom.purchase.bid</field>
-    <field name='view_mode'>tree,form</field>
-    <field name='view_id' ref='view_custom_purchase_bid_tree'/>
+  <!-- Action -->
+  <record id="action_custom_purchase_tree" model="ir.actions.act_window">
+    <field name="name">Vendor Bids</field>
+    <field name="res_model">custom.purchase.bid</field>
+    <field name="view_mode">tree,form</field>
   </record>
 
-  <menuitem id='menu_purchase_bid' name='Vendor Bids' parent='purchase.menu_purchase_root' action='action_custom_purchase_tree'/>
-
+  <!-- Menu Items -->
+  <menuitem id="menu_purchase_bid" name="Vendor Bids" parent="purchase.menu_purchase_root" />
+  <menuitem id="menu_all_purchase_bids" name="Bids" parent="menu_purchase_bid"
+    action="action_custom_purchase_tree" />
 </odoo>
-
