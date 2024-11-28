@@ -18,21 +18,21 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'purchase', 'hr', 'product'],
+    'depends': ['base', 'purchase', 'hr', 'product','mail'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         #'views/views.xml',
         #'views/templates.xml',
+        'data/sequence_bid.xml',
         'views/custom_purchase_order_view.xml',
         'views/custom_purchase_bid_view.xml',
-        'views/custom_purchase_request_view.xml',
     ],
-    # only loaded in demonstration mode
-    #'demo': [
+    #only loaded in demonstration mode
+    # 'demo': [
     #    'demo/demo.xml',
-    #],
+    # ],
     'installable': True,
     'application': True,
 }
