@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="menu_procurement_root" name="Procurement Requests"
+              parent="purchase.menu_purchase_root" sequence="10" />
+
+    <menuitem id="menu_procurement_requests" name="Requests"
+              parent="menu_procurement_root" action="action_procurement_requests" />
+</odoo>
