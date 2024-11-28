@@ -1,0 +1,8 @@
+<odoo>
+    <record id="seq_procurement_request" model="ir.sequence">
+        <field name="name">Purchase Bid</field>
+        <field name="code">custom.purchase.bid</field>
+        <field name="prefix">BD</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>
