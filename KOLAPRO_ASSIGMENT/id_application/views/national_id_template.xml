@@ -1,71 +1,87 @@
 <odoo>
   <template id="national_id_application_form" name="National ID Application">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-    <link rel='stylesheet' href='/id_application/static/src/css/template1.css'/>
+    <t t-call='website.layout'>
+        <div class="container my-5">
+            <h2 class="text-center mb-4">National ID Application</h2>
+            <form action="/national_id/application/submit" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
 
-    <div class='container' t-nocache='True'>
-      <div class='form-container'>
-        <h2 class='form-title'>National ID Application</h2>
-        <form action="/national_id/application/submit" method="post" enctype="multipart/form-data">
-          <input type='hidden' name='csrf_token' t-att-value='request.csrf_token()'/>
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" class="form-control" required="required"/>
-          </div>
-          <div class='form-group'>
-            <label for='sex'>Sex</label>
-            <select id='sex' name='sex' class='form-control' required='required'>
-              <option value=''> Select Sex</option>
-              <option value='male'>Male</option>
-              <option value='female'>Female</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="country_of_origin">Country of Origin</label>
-            <input type="text" id="country_of_origin" name="country_of_origin" class="form-control" required="required"/>
-          </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required="required" placeholder="Enter your full name" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="sex" class="form-label">Sex</label>
+                        <select id="sex" name="sex" class="form-select" required="required">
+                            <option value="" disabled="disabled" selected="selected">Select Sex</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
 
-          <div class='form-group'>
-            <label for='parent_nin'>Parent NIN</label>
-            <input type='text' id='parent_nin' name='parent_nin' class='form-control'/>
-          </div>
-          <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input type="date" id="dob" name="date_of_birth" class="form-control" required="required"/>
-          </div>
-          <div class='form-group'>
-            <label for='contacts'>Contact Details</label>
-            <input type='text' id='contacts' name='contacts' class='form-control' required='required'/>
-          </div>
-          <div class="form-group">
-            <label for="lc_letter">LC Reference Letter</label>
-            <input type="file" id="lc_letter" name="lc_letter" class="form-control" required="required"/>
-          </div>
-          <div class="form-group">
-            <label for="photo">Photo</label>
-            <input type="file" id="photo" name="photo" class="form-control" required="required"/>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="country_of_origin" class="form-label">Country of Origin</label>
+                        <input type="text" id="country_of_origin" name="country_of_origin" class="form-control" required="required" placeholder="e.g., Uganda" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="parent_nin" class="form-label">Parent NIN</label>
+                        <input type="text" id="parent_nin" name="parent_nin" class="form-control" placeholder="Optional" />
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" id="dob" name="date_of_birth" class="form-control" required="required" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="contacts" class="form-label">Contact Details</label>
+                        <input type="text" id="contacts" name="contacts" class="form-control" required="required" placeholder="e.g., +256123456789" />
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="lc_letter" class="form-label">LC Reference Letter</label>
+                        <input type="file" id="lc_letter" name="lc_letter" class="form-control" required="required" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="photo" class="form-label">Photo</label>
+                        <input type="file" id="photo" name="photo" class="form-control" required="required" />
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-5">Submit</button>
+                </div>
+            </form>
+        </div>
+    </t>
+</template>
+
+
+  <template id="thank_you" name="Thank you">
+    <div
+      style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+      <h3 style="font-size: 1.8rem; color: #4CAF50; margin-bottom: 10px;">Thank you for your
+        submission!</h3>
+      <p style="font-size: 1.2rem; color: #555;">Your application has been received and is under
+        review.</p>
     </div>
   </template>
-	<template id="thank_you" name="Thank you">
-		<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
-			<h3 style="font-size: 1.8rem; color: #4CAF50; margin-bottom: 10px;">Thank you for your submission!</h3>
-			<p style="font-size: 1.2rem; color: #555;">Your application has been received and is under review.</p>
-		</div>
-	</template>
 
-	<template id="error" name="Error">
-		<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; border: 1px solid #f44336; background-color: #fdecea; border-radius: 8px;">
-			<h3 style="font-size: 1.8rem; color: #f44336; margin-bottom: 10px;">Submission Failed</h3>
-			<p style="font-size: 1.2rem; color: #333;">
-				There was an error with your submission: <t t-esc="error" />
-			</p>
-		</div>
-	</template>
+  <template id="error" name="Error">
+    <div
+      style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; border: 1px solid #f44336; background-color: #fdecea; border-radius: 8px;">
+      <h3 style="font-size: 1.8rem; color: #f44336; margin-bottom: 10px;">Submission Failed</h3>
+      <p style="font-size: 1.2rem; color: #333;"> There was an error with your submission: <t
+          t-esc="error" />
+      </p>
+    </div>
+  </template>
 
 
 </odoo>
-
