@@ -11,7 +11,10 @@ Enhance Odoo's supply chain management with powerful procurement tools. The Cust
 
 #### Key Features:
 
-- Automated Procurement Propositions: Reduce inventory levels by generating accurate purchase propositions based on procurement rules, stock levels, and sales forecasts.
+- Reduce inventory level with procurement rules. Get the right purchase
+proposition at the right time to reduce your inventory level. Improve your
+purchase and inventory performance with procurement rules depending on stock
+levels, logistic rules, sales orders, forecasted manufacturing orders, etc.
 
 - Purchase Tenders: Manage purchase tenders efficiently, compare vendor offers, and select the best options.
 
@@ -25,6 +28,18 @@ Enhance Odoo's supply chain management with powerful procurement tools. The Cust
 
 - Vendor Bidding Management: Utilize a dedicated bidding page to handle vendor bids effectively.
 
+
+### 2 Purchase Request
+-----------------------
+Streamline your procurement process with the Purchase Request Module. This module allows employees to easily create procurement requests and automates the subsequent steps like creating  and sending RFQs.
+
+### Key Features:
+
+- Procurement Requests: Employees can create detailed procurement request for the required products.
+
+- Automated RFQ Generation: Upon submission of a procurement request. An RFQ is atomatically created for the product lines.
+
+- Email Integration: Ensures that RFQ's are promptly sent to respective vendors via Email
 
 
 ### 2. National ID Application
