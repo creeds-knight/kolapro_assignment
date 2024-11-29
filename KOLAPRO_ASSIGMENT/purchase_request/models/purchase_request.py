@@ -14,7 +14,7 @@ class ProcurementRequest(models.Model):
         ('confirmed', 'Confirmed'),
         ('rfq', 'RFQ Created'),
     ], string='Status', default='draft', track_visibility='onchange')
-    # rfq_id = fields.Many2one('purchase.order', string='RFQ')
+    rfq_id = fields.Many2one('purchase.order', string='RFQ')
     request_date = fields.Date(string='Request Date', default=fields.Date.context_today)
     expected_date = fields.Date(string='Expected Date')
     total_quantity = fields.Float(string='Total Quantity', compute='_compute_total_quantity', store=True)
