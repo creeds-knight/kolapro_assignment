@@ -23,16 +23,16 @@
     <field name="arch" type="xml">
       <form string="Applicant Details">
         <header>
-          <button name="submit_application" type="object"
+          <button name="submit_application" type="object" groups="id_application.national_id_group_user,id_application.national_id_group_admin"
             invisible="stage not in ('draft')" string="Submit"
             class="oe_highlight" />
-          <button name="approve_stage1" type="object"
+          <button name="approve_stage1" type="object" groups="id_application.national_id_group_user,id_application.national_id_group_admin"
             invisible="stage not in ('submitted')" string="Approve 1"
             class="oe_highlight" />
-          <button name="approve_stage2" type="object"
+          <button name="approve_stage2" type="object" groups="id_application.national_id_group_admin"
             invisible="stage not in ('approved_stage1')" string="Approve 2"
             class="oe_highlight" />
-          <button name="reject_application" type="object"
+          <button name="reject_application" type="object" groups="id_application.national_id_group_admin"
             invisible="stage not in ('submitted','approved_stage1','approved_stage2')" string="Reject"
             class="oe_highlight" />
           <field name="stage" widget="statusbar"
