@@ -8,7 +8,7 @@ class PurchaseBid(models.Model):
 
     name = fields.Char('Bid reference', required=True, default='New')
     rfq = fields.Many2one('purchase.order', string='RFQ')
-    bid_amount = fields.Float('Bid Amount', required=True, default=0)
+    bid_amount = fields.Float('Bid Amount', required=True, default=0, compute="_compute_bid_amount")
     bid_date = fields.Datetime('Bid Date', default=fields.Datetime.now)
     vendor = fields.Many2one("res.partner", string="Vendor", required=True, domain="[('id', 'in', vendors_with_bids)]")
     vendors_with_bids = fields.Many2many("res.partner", string="Vendors with Bids", compute="_compute_vendors_with_bids")
@@ -20,6 +20,7 @@ class PurchaseBid(models.Model):
     bid_details = fields.Text('Bid Description')
     bids_on_rfq = fields.Many2many('custom.purchase.bid','RFQ Bids', compute="_compute_bids_on_rfq")
     number_of_bids_on_rfq = fields.Integer('Number of bids', compute='_compute_number_of_bids_on_rfq')
+    product_ids = fields.One2many('custom.purchase.bid.line', 'bid_id', string='Bid Line')
 
     
    
@@ -27,7 +28,12 @@ class PurchaseBid(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('custom.purchase.bid') or 'New'
+
+       
         return super().create(vals)
+    
+
+
     
     def action_accept_bid(self):
         for record in self:
@@ -39,6 +45,8 @@ class PurchaseBid(models.Model):
             
             # Set the partner_id to the accepted vendor and confirm the RFQ
             record.message_post(body=f"Bid accepted by {self.env.user.name}. Vendor: {record.vendor.name}")
+
+            self._update_bid_order_line()
 
             if record.rfq:
                 record.rfq.partner_id = record.vendor.id
@@ -97,6 +105,10 @@ class PurchaseBid(models.Model):
         else:
             # Log or handle vendors without an email
             print(f"Vendor {vendor.name} does not have an email address.")
+
+        # partner_id = vendor.id
+        # return rfq.action_send_rfq()
+        
         
     @api.depends('bids_on_rfq')
     def _compute_number_of_bids_on_rfq(self):
@@ -105,5 +117,53 @@ class PurchaseBid(models.Model):
                 # Count the number of bids linked to this RFQ
                 record.number_of_bids_on_rfq = self.search_count([('rfq.name', '=', record.rfq.name)])
             else:
-                # If no RFQ, set the count to 0
                 record.number_of_bids_on_rfq = 0
+
+    @api.depends('product_ids')
+    def _compute_bid_amount(self):
+        for  record in self:
+            record.bid_amount = sum(line.total_cost for line in self.product_ids)
+        return True
+    
+    @api.onchange('rfq')
+    def _update_bid_order_line(self):
+        for record in self:
+        # Clear existing bid lines if RFQ changes
+            record.product_ids = [(5, 0, 0)]
+        
+        # Check if there is an associated RFQ
+            if record.rfq:
+                # Loop through each line in the RFQ
+                bid_lines = []
+                for line in record.rfq.order_line:
+                    bid_lines.append((0, 0, {
+                        'product_id': line.product_id.id,
+                        'quantity': line.product_qty,
+                        'unit_cost': line.price_unit,
+                        'description': line.name or "",
+                    }))
+                
+                # Add these lines to the bid
+                record.product_ids = bid_lines
+
+    
+
+
+        
+class PurchaseBidLine(models.Model):
+    _name = 'custom.purchase.bid.line'
+    _description = 'Purchase Bid Line'
+
+    bid_id = fields.Many2one('custom.purchase.bid', string='Bid')
+    product_id = fields.Many2one('product.product', string='Product', required=True)
+    quantity = fields.Float(string='Quantity', required=True, default=1.0)
+    unit_cost = fields.Float(string="Cost", required=True, default=0.0)
+    total_cost = fields.Float("Total Cost", compute='_compute_total_cost')
+    description = fields.Text(string="Description")
+
+    @api.depends('unit_cost', 'quantity')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.unit_cost * record.quantity
+            
+
