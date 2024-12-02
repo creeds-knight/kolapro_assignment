@@ -20,6 +20,7 @@
         <field name="model">procurement.request</field>
         <field name="arch" type="xml">
             <form>
+
                 <header>
                     <button name="action_confirm" type="object" string="Confirm"
                         invisible="state not in ('draft')"
@@ -30,6 +31,13 @@
                         readonly="1" />
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="328" type="action"
+                            icon="fa-credit-card">
+                            <field string="Purchases" name="purchases_by_employee" widget="statinfo"
+                                field_id="purchase_order_count_0" />
+                        </button>
+                    </div>
                     <notebook>
                         <page string="General Information">
                             <group>
