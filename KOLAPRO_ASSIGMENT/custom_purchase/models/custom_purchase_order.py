@@ -18,6 +18,44 @@ class CustomPurchaseOrder(models.Model):
             
 
 
+    # def action_rfq_send(self):
+    #     """
+    #     Custom method to send RFQs to all vendors associated with this record.
+    #     """
+    #     # Check if there are vendors to process
+    #     if not self.vendor_ids:
+    #         return super(CustomPurchaseOrder, self).action_rfq_send()
+
+    #     # Reference the email template for RFQ
+    #     template_id = self.env.ref('purchase.email_template_edi_purchase').id
+    #     mail_template = self.env['mail.template'].browse(template_id)
+
+    #     original_name = self.name
+
+       
+    #     for vendor in self.vendor_ids:
+    #         # Create a copy of the RFQ for each vendor
+    #         if self.partner_id != vendor:
+    #             rfq_copy = self.copy()
+    #             rfq_copy.partner_id = vendor.id
+    #             rfq_copy.name = original_name  # Retain the original RFQ name
+                
+    #             # rfq_copy.button_confirm()
+
+    #             # Send the email to the vendor
+    #             if vendor.email:
+    #                 mail_template.with_context(email_to=vendor.email).send_mail(
+    #                     rfq_copy.id,
+    #                     force_send=True,
+    #                 )
+    #                 rfq_copy.state = 'sent'
+    #             else:
+    #                 # Log or handle vendors without an email
+    #                 print(f"Vendor {vendor.name} does not have an email address.")
+
+        
+    #     return super(CustomPurchaseOrder, self).action_rfq_send()
+
     def action_rfq_send(self):
         """
         Custom method to send RFQs to all vendors associated with this record.
@@ -30,28 +68,27 @@ class CustomPurchaseOrder(models.Model):
         template_id = self.env.ref('purchase.email_template_edi_purchase').id
         mail_template = self.env['mail.template'].browse(template_id)
 
-        original_name = self.name
-
-       
-        for vendor in self.vendor_ids:
-            # Create a copy of the RFQ for each vendor
-            if self.partner_id != vendor:
-                rfq_copy = self.copy()
-                rfq_copy.partner_id = vendor.id
-                rfq_copy.name = original_name  # Retain the original RFQ name
-                
-                # rfq_copy.button_confirm()
-
-                # Send the email to the vendor
-                if vendor.email:
-                    mail_template.with_context(email_to=vendor.email).send_mail(
-                        rfq_copy.id,
-                        force_send=True,
-                    )
-                    rfq_copy.state = 'sent'
-                else:
-                    # Log or handle vendors without an email
-                    print(f"Vendor {vendor.name} does not have an email address.")
-
         
-        return super(CustomPurchaseOrder, self).action_rfq_send()
+        for vendor in self.vendor_ids:
+            # Temporarily set the partner_id to the current vendor
+            self.partner_id = vendor
+
+            # Prepare email context
+            ctx = dict(self.env.context)
+            ctx.update({'email_to': vendor.email})
+
+            # Send the email to the vendor
+            if vendor.email:
+                mail_template.with_context(ctx).send_mail(
+                    self.id,
+                    force_send=True,
+                )
+                self.state = 'sent'
+            else:
+                # Log or handle vendors without an email
+                print(f"Vendor {vendor.name} does not have an email address.")
+
+        # Reset the partner_id to the original or first vendor
+        self.partner_id = self.vendor_ids[0]
+
+        # return super(CustomPurchaseOrder, self).action_rfq_send()
