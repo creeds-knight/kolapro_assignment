@@ -1,0 +1,20 @@
+from odoo import models, fields, api
+
+class PurchaseBidLine(models.Model):
+    _name = 'custom.purchase.bid.line'
+    _description = 'Purchase Bid Line'
+
+    bid_id = fields.Many2one('custom.purchase.bid', string='Bid')
+    product_id = fields.Many2one('product.product', string='Product', required=True)
+    quantity = fields.Float(string='Quantity', required=True, default=1.0)
+    unit_cost = fields.Float(string="Cost", required=True, default=0.0)
+    total_cost = fields.Float("Total Cost", compute='_compute_total_cost')
+    description = fields.Text(string="Description")
+
+
+    @api.depends('unit_cost', 'quantity')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.unit_cost * record.quantity
+            
+
