@@ -20,6 +20,8 @@ class ProcurementRequest(models.Model):
     total_quantity = fields.Float(string='Total Quantity', compute='_compute_total_quantity', store=True)
     total_cost = fields.Float(string='Budget ', compute='_compute_total_cost', store=True)
     comments = fields.Text(string='Additional Comments')
+    purchases_by_employee = fields.Integer('Purchases', compute='_compute_purchases_by_employee')
+
 
     @api.model
     def create(self, vals):
@@ -73,3 +75,12 @@ class ProcurementRequest(models.Model):
     def action_add_from_catalog(self):
         products = self.env['product.product'].browse(self.env.context.get('product_ids'))
         return products.action_add_from_catalog()
+    
+    @api.depends('requested_by')
+    def _compute_purchases_by_employee(self):
+        # current_employee_name = self.requested_by.name
+        for record in self:
+            if record.requested_by:
+                record.purchases_by_employee = self.search_count([('requested_by', '=', record.requested_by.id)])
+            else:
+                record.purchases_by_employee = 0 
